@@ -61,7 +61,7 @@ begin
     
     -- ADDER
     
-    u_adder : somador8bits port map(x, y, 0, s_overflow, sadd);
+    u_adder : somador8bits port map(x, y, '0', s_overflow, sadd);
 
     -- MUX
     

@@ -18,11 +18,11 @@ architecture dostoragestuff of moduloMEM is
     -- componente regREM e regRDM
     component reg8bits is
         port(
-            d : in std_logic;
+            d : in std_logic_vector(7 downto 0);
             clock : in std_logic;
-            cl, pr : in std_logic; 
+            pr, cl : in std_logic; 
             nrw : in std_logic;
-            s : out std_logic
+            s : out std_logic_vector(7 downto 0)
         );
     end component;
 
@@ -47,15 +47,18 @@ begin
 
     -- registrador REM
     u_reg_8bits_rem : reg8bits port map(
-        s_mux2rem, clk, rst, '1', REM_nrw, s_rem2mem 
+        s_mux2rem, clk,'1', rst, REM_nrw, s_rem2mem 
     );
 
     -- Memória
     -- remember
+    u_memoria : as_ram port map(
+        s_rem2mem, s_mem2rdm, MEM_nrw, rst
+    );
    
     -- registrador RDM
     u_reg_8bits_rdm : reg8bits port map(
-        s_mem2rdm, clk, rst, '1', RDM_nrw, s_rdm2barr
+        s_mem2rdm, clk, '1', rst, RDM_nrw, s_rdm2barr
     );
 
     -- trap killer!

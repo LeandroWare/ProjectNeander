@@ -31,22 +31,22 @@ architecture domathstuff of moduloULA is
     -- Componente registrador 8 bits
     component reg8bits is
         port(
-            d : in std_logic;
+            d : in std_logic_vector(7 downto 0);
             clock : in std_logic;
-            cl, pr : in std_logic; 
+            pr, cl : in std_logic; 
             nrw : in std_logic;
-            s : out std_logic
+            s : out std_logic_vector(7 downto 0)
         );
     end component;
 
     -- Componente registrador 2 bits
     component reg2bits is 
         port(
-            d : in std_logic;
+            d : in std_logic_vector(1 downto 0);
             clock : in std_logic;
-            cl, pr : in std_logic; 
+            pr, cl : in std_logic; 
             nrw : in std_logic;
-            s : out std_logic
+            s : out std_logic_vector(1 downto 0)
         );
     end component;
 
@@ -58,7 +58,7 @@ begin
     -- registrador AC
 
     u_registradorAC : reg8bits port map(
-        s_ula2ac, clock, rst, '1', AC_nrw, s_ac2ula
+        s_ula2ac, clk, '1', rst, AC_nrw, s_ac2ula
     ); 
                     --datain <= s_ula2ac;
                     --clk <= clock;
@@ -70,7 +70,7 @@ begin
     -- registrador FLAGS
     
     u_regFLAGS : reg2bits port map(
-        s_ula2flags, clock, rst, '1', AC_nrw, flags_nz
+        s_ula2flags, clk, '1', rst, AC_nrw, flags_nz
     );
                     --datain <= s_ula_flags;
                     --clk <= clock;
