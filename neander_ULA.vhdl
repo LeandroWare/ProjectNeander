@@ -26,7 +26,29 @@ architecture domathstuff of moduloULA is
             flags_nz    : out std_logic_vector(1 downto 0);
             s           : out std_logic_vector(7 downto 0)
         );
-    end component;  
+    end component;
+
+    -- Componente registrador 8 bits
+    component reg8bits is
+        port(
+            d : in std_logic;
+            clock : in std_logic;
+            cl, pr : in std_logic; 
+            nrw : in std_logic;
+            s : out std_logic
+        );
+    end component;
+
+    -- Componente registrador 2 bits
+    component reg2bits is 
+        port(
+            d : in std_logic;
+            clock : in std_logic;
+            cl, pr : in std_logic; 
+            nrw : in std_logic;
+            s : out std_logic
+        );
+    end component;
 
     signal s_ac2ula, s_ula2ac : std_logic_vector(7 downto 0);
     signal s_ula2flags        : std_logic_vector(1 downto 0);
@@ -35,7 +57,9 @@ begin
 
     -- registrador AC
 
-    u_registradorAC : reg_8bits port map(); 
+    u_registradorAC : reg8bits port map(
+        s_ula2ac, clock, rst, '1', AC_nrw, s_ac2ula
+    ); 
                     --datain <= s_ula2ac;
                     --clk <= clock;
                     --cl <= rst; 
@@ -45,7 +69,9 @@ begin
 
     -- registrador FLAGS
     
-    u_regFLAGS : reg2bits port map();
+    u_regFLAGS : reg2bits port map(
+        s_ula2flags, clock, rst, '1', AC_nrw, flags_nz
+    );
                     --datain <= s_ula_flags;
                     --clk <= clock;
                     --cl <= rst; 
@@ -55,7 +81,9 @@ begin
 
     -- modulo ULA interno
     
-    u_ulaInterno : moduloULAinterno port map();
+    u_ulaInterno : moduloULAinterno port map(
+        s_ac2ula, barramento, ula_op, s_ula2flags, s_ula2ac
+    );
                     --x <= s_ac2ula;
                     --y <= barramento;
                     --ula_op <= ula_op;
