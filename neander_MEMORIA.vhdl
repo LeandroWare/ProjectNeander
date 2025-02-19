@@ -41,9 +41,7 @@ architecture dostoragestuff of moduloMEM is
 begin
 
     -- mux2x8
-    s_mux2rem <= end_PC   when nbarrPC = '1' else
-                 end_Barr when nbarrPC = '0' else
-                 (others => 'Z');
+    s_mux2rem <= end_PC when nbarrPC = '1' else end_Barr;
 
     -- registrador REM
     u_reg_8bits_rem : reg8bits port map(

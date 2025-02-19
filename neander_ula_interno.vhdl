@@ -44,7 +44,6 @@ begin
     -- OR
 
     sor(0) <=  x(0) or y(0);
-    sor(0) <=  x(0) or y(0);
     sor(1) <=  x(1) or y(1);
     sor(2) <=  x(2) or y(2);
     sor(3) <=  x(3) or y(3);
