@@ -27,10 +27,12 @@ architecture docontrolstuff of moduloUC is
   -- componente DECODE
   -- on code!
   -- componente Contador0-7
-  component moduloContador is
+  component contador is
     port (
-      rst, clk : in  std_logic;
-      counter  : out std_logic_vector(2 downto 0)
+      clock : in  std_logic;
+      reset : in  std_logic;
+      pr    : in  std_logic;
+      q     : out std_logic_vector(2 downto 0)
     );
   end component;
 
@@ -50,6 +52,29 @@ architecture docontrolstuff of moduloUC is
   signal instrucaoAtiva : string(1 to 3);
   signal operacaoULA    : string(1 to 3);
   signal FLAGS          : string(1 to 2);
+  signal sLDA           : std_logic_vector(10 downto 0) := (others => 'Z');
+
+  component LDA is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  -- os sinais cabulosos
+  --- cada sinal é um componente como o neander_LDA.vhdl
+  signal sNOP : std_logic_vector(10 downto 0) := "10000000000";
+  signal sSTA : std_logic_vector(10 downto 0) := "01000000000";
+  signal sLDA : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sADD : std_logic_vector(10 downto 0) := "00010000000";
+  signal sOR  : std_logic_vector(10 downto 0) := "00001000000";
+  signal sAND : std_logic_vector(10 downto 0) := "00000100000";
+  signal sNOT : std_logic_vector(10 downto 0) := "00000010000";
+  signal sJMP : std_logic_vector(10 downto 0) := "00000001000";
+  signal sJN  : std_logic_vector(10 downto 0) := "00000000100";
+  signal sJZ  : std_logic_vector(10 downto 0) := "00000000010";
+  signal sHLT : std_logic_vector(10 downto 0) := "00000000001";
 
 begin
   -- registrador RI
@@ -66,8 +91,25 @@ begin
               "00000001000" when s_ri2dec = "10000000" else -- JMP
               "00000000100" when s_ri2dec = "10010000" else -- JN
               "00000000010" when s_ri2dec = "10100000" else -- JZ
-              "00000000001" when s_ri2dec = "11110000";     -- HLT
+              "00000000001" when s_ri2dec = "11110000"; -- HLT
 
   -- contador
+  u_contador: moduloContador port map (clk, rst, '1', s_ciclo); -- td zuado a ordem
+
   -- Unidade de Controle
+  -- vou usar como componente
+  s_bctrl <= sLDA when s_dec2uc = "00100000000" else
+             sSTA when s_dec2uc = "01000000000" else
+             sADD when s_dec2uc = "00010000000" else
+             sOR  when s_dec2uc = "00001000000" else
+             sAND when s_dec2uc = "00000100000" else
+             sNOT when s_dec2uc = "00000010000" else
+             sJMP when s_dec2uc = "00000001000" else
+             sJN  when s_dec2uc = "00000000100" else
+             sJZ  when s_dec2uc = "00000000010" else
+             sHLT when s_dec2uc = "00000000001";
+
+  -- componente LDA
+  u_LDA: LDA port map (s_ciclo, sLDA);
+
 end architecture;
