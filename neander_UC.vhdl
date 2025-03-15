@@ -113,3 +113,4 @@ begin
   u_LDA: LDA port map (s_ciclo, sLDA);
 
 end architecture;
+
