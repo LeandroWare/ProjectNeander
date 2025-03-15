@@ -54,8 +54,89 @@ architecture docontrolstuff of moduloUC is
   signal FLAGS          : string(1 to 2);
 
   -- Componentes dos comandos
-
   component LDA is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component NOP is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component STA is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component ADD is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component ORR is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component ANDD is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component NOTT is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component JMP is
+    port (
+      c : in  std_logic_vector(2 downto 0);
+      s : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component JN is
+    port (
+      c       : in  std_logic_vector(2 downto 0);
+      jn_flag :     std_logic;
+      s       : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component JZ is
+    port (
+      c       : in  std_logic_vector(2 downto 0);
+      jz_flag :     std_logic;
+      s       : out std_logic_vector(10 downto 0)
+        -- signal b_ctrl
+    );
+  end component;
+
+  component HLT is
     port (
       c : in  std_logic_vector(2 downto 0);
       s : out std_logic_vector(10 downto 0)
@@ -77,6 +158,8 @@ architecture docontrolstuff of moduloUC is
   signal sJZ  : std_logic_vector(10 downto 0) := (others => 'Z');
   signal sHLT : std_logic_vector(10 downto 0) := (others => 'Z');
 
+  signal in_jn, in_jz : std_logic;
+
 begin
   -- registrador RI
   u_regRI: reg8bits port map (barramento, clk, '1', rst, RI_nrw, s_ri2dec);
@@ -95,7 +178,7 @@ begin
               "00000000001" when s_ri2dec = "11110000"; -- HLT
 
   -- contador
-  u_contador: contador port map (clk, rst, '1', s_ciclo); -- td zuado a ordem
+  u_contador: contador port map (clk, rst, '1', s_ciclo);
 
   -- Unidade de Controle
   -- vou usar como componente
@@ -110,8 +193,31 @@ begin
              sJZ  when s_dec2uc = "00000000010" else
              sHLT when s_dec2uc = "00000000001";
 
+  in_jn <= flags_nz(1); 
+  in_jz <= flags_nz(0); 
+
   -- componente LDA
   u_LDA: LDA port map (s_ciclo, sLDA);
+  -- componente STA
+  u_STA: STA port map (s_ciclo, sSTA);
+  -- componente NOP
+  u_NOP: NOP port map (s_ciclo, sNOP);
+  -- componente ADD
+  u_ADD: ADD port map (s_ciclo, sADD);
+  -- componente ORR
+  u_OR: ORR port map (s_ciclo, sOR);
+  -- componente ANDD
+  u_AND: ANDD port map (s_ciclo, sAND);
+  -- componente NOTT
+  u_NOT: NOTT port map (s_ciclo, sNOT);
+  -- componente JMP
+  u_JMP: JMP port map (s_ciclo, sJMP);
+  -- componente JN
+  u_JN: JN port map (s_ciclo, in_jn, sJN);
+  -- componente JZ
+  u_JZ: JZ port map (s_ciclo, in_jz, sJZ);
+  -- componente HLT
+  u_HLT: HLT port map (s_ciclo, sHLT);
 
 end architecture;
 

@@ -12,13 +12,13 @@ end entity;
 
 architecture JMP of JMP is
 begin
-  s(0)          ; -- 
-  s(1)          ; -- 
-  s(4 downto 2) ; -- 
-  s(5)          ; -- 
-  s(6)          ; -- 
-  s(7)          ; -- 
-  s(8)          ; -- 
-  s(9)          ; -- 
-  s(10)         ; -- 
+  s(0)          <= '0' when c = "101" else '1';                -- barrINC
+  s(1)          <= '1';                                        -- barrPC
+  s(4 downto 2) <= "000";                                      -- ULA_op
+  s(5)          <= '1' when (c = "001" or c = "101") else '0'; -- PC_nrw
+  s(6)          <= '0';                                        -- AC_nrw
+  s(7)          <= '0';                                        -- MEM_rw
+  s(8)          <= '1' when (c = "000" or c = "011") else '0'; -- REM_nrw
+  s(9)          <= '1' when (c = "001" or c = "100") else '0'; -- RDM_nrw
+  s(10)         <= '1' when c = "010" else '0';                -- RI_nrw
 end architecture;
