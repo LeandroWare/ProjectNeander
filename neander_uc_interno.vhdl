@@ -37,8 +37,9 @@ architecture dopointstuff of moduloPC is
   end component;
 
   signal sendereco, s_mux2pc : std_logic_vector(7 downto 0) := (others => 'Z');
-  signal sadd, saddc, x, y   : std_logic_vector(7 downto 0) := (others => 'Z');
+  signal sadd, x, y          : std_logic_vector(7 downto 0) := (others => 'Z');
   signal s_um                : std_logic_vector(7 downto 0) := "00000001";
+  signal saddc               : std_logic;
 
 begin
 
@@ -54,7 +55,7 @@ begin
   y <= s_um;
 
   -- ADDER
-  u_adder: somador8bits port map (x, y, '0', s_addc, sadd);
+  u_adder: somador8bits port map (x, y, '0', saddc, sadd);
 
   -- mux2x8
   -- if e else basicamente

@@ -52,7 +52,8 @@ architecture docontrolstuff of moduloUC is
   signal instrucaoAtiva : string(1 to 3);
   signal operacaoULA    : string(1 to 3);
   signal FLAGS          : string(1 to 2);
-  signal sLDA           : std_logic_vector(10 downto 0) := (others => 'Z');
+
+  -- Componentes dos comandos
 
   component LDA is
     port (
@@ -64,17 +65,17 @@ architecture docontrolstuff of moduloUC is
 
   -- os sinais cabulosos
   --- cada sinal é um componente como o neander_LDA.vhdl
-  signal sNOP : std_logic_vector(10 downto 0) := "10000000000";
-  signal sSTA : std_logic_vector(10 downto 0) := "01000000000";
+  signal sNOP : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sSTA : std_logic_vector(10 downto 0) := (others => 'Z');
   signal sLDA : std_logic_vector(10 downto 0) := (others => 'Z');
-  signal sADD : std_logic_vector(10 downto 0) := "00010000000";
-  signal sOR  : std_logic_vector(10 downto 0) := "00001000000";
-  signal sAND : std_logic_vector(10 downto 0) := "00000100000";
-  signal sNOT : std_logic_vector(10 downto 0) := "00000010000";
-  signal sJMP : std_logic_vector(10 downto 0) := "00000001000";
-  signal sJN  : std_logic_vector(10 downto 0) := "00000000100";
-  signal sJZ  : std_logic_vector(10 downto 0) := "00000000010";
-  signal sHLT : std_logic_vector(10 downto 0) := "00000000001";
+  signal sADD : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sOR  : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sAND : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sNOT : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sJMP : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sJN  : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sJZ  : std_logic_vector(10 downto 0) := (others => 'Z');
+  signal sHLT : std_logic_vector(10 downto 0) := (others => 'Z');
 
 begin
   -- registrador RI
@@ -94,7 +95,7 @@ begin
               "00000000001" when s_ri2dec = "11110000"; -- HLT
 
   -- contador
-  u_contador: moduloContador port map (clk, rst, '1', s_ciclo); -- td zuado a ordem
+  u_contador: contador port map (clk, rst, '1', s_ciclo); -- td zuado a ordem
 
   -- Unidade de Controle
   -- vou usar como componente
