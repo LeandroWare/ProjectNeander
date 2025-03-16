@@ -236,16 +236,17 @@ begin
                     "HLT" when s_ri2dec = "11110000" else -- HLT
                     "ERR";
 
-  operacaoULA <= "001" when s_bctrl = sADD else
-                 "101" when s_bctrl = sOR else
-                 "011" when s_bctrl = sAND else
-                 "100" when s_bctrl = sNOT else
-                 "000" when s_bctrl = sLDA else
+  operacaoULA <= "001" when s_ri2dec = "00110000" else -- ADD
+                 "101" when s_ri2dec = "01000000" else -- OR
+                 "011" when s_ri2dec = "01010000" else -- AND
+                 "100" when s_ri2dec = "01100000" else -- NOT
+                 "000" when s_ri2dec = "00100000" else -- LDA
                  "ERR";
 
-  FLAGS <= "JN" when in_jn = '1' else
-           "JZ" when in_jz = '1' else
-           "NA";
+  FLAGS <= "JN" when (in_jn = '1' and in_jz = '0') else
+           "JZ" when (in_jz = '1' and in_jn = '0') else
+           "NZ" when (in_jn = '1' and in_jz = '1') else
+           "--";
 
 end architecture;
 
