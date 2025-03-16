@@ -16,7 +16,7 @@ end entity;
 --Módulo
 
 architecture reg1bits of reg1bit is
-  component ffjk is
+  component ffjkd is
     port (
       d      : in  std_logic;
       clock  : in  std_logic;
@@ -33,6 +33,6 @@ begin
   datain <= dataout when nrw = '0' else d;
 
   -- instância do reg
-  u_reg: ffjk port map (datain, clock, pr, cl, dataout);
+  u_reg: ffjkd port map (datain, clock, pr, cl, dataout);
 
 end architecture;

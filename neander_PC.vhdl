@@ -43,11 +43,6 @@ architecture dopointstuff of moduloPC is
 
 begin
 
-  -- registrador PC
-  -- instanciar registrador normalmente como feito anteriormente
-  -- easy pease lemous queeze
-  u_regPC: reg8bits port map (s_mux2pc, clk, '1', rst, PC_nrw, sendereco);
-  endereco <= sendereco;
 
   -- incrementador
   -- instanciar
@@ -60,5 +55,11 @@ begin
   -- mux2x8
   -- if e else basicamente
   s_mux2pc <= sadd when nbarrINC = '1' else barramento;
+  
+  -- registrador PC
+  -- instanciar registrador normalmente como feito anteriormente
+  -- easy pease lemous queeze
+  u_regPC: reg8bits port map (s_mux2pc, clk, '1', rst, PC_nrw, sendereco);
+  endereco <= sendereco;
 
 end architecture;

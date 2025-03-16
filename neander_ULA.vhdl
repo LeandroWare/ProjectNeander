@@ -48,17 +48,10 @@ architecture domathstuff of moduloULA is
     );
   end component;
 
-  signal s_ac2ula, s_ula2ac : std_logic_vector(7 downto 0);
+  signal s_ac2ula, s_ula2ac : std_logic_vector(7 downto 0) := (others => 'Z');
   signal s_ula2flags        : std_logic_vector(1 downto 0);
 
 begin
-
-  -- registrador AC
-  u_registradorAC: reg8bits
-    port map (
-      s_ula2ac, clk, '1', rst, AC_nrw, s_ac2ula
-    );
-
   -- registrador FLAGS
   u_regFLAGS: reg2bits
     port map (
@@ -69,6 +62,12 @@ begin
   u_ulaInterno: moduloULAinterno
     port map (
       s_ac2ula, barramento, ula_op, s_ula2flags, s_ula2ac
+    );
+
+  -- registrador AC
+  u_registradorAC: reg8bits
+    port map (
+      s_ula2ac, clk, '1', rst, AC_nrw, s_ac2ula
     );
 
   barramento <= s_ac2ula when MEM_nrw = '1' else (others => 'Z');

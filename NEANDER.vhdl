@@ -67,10 +67,16 @@ architecture comPUTAdoringstuff of NEANDER is
 
 begin
 
+  -- modulo ULA
+  u_ula: moduloULA
+    port map (
+      rst, clk, AC_nrw, ula_op, MEM_nrw, flagsNZ, barramento
+    );
+
   -- modulo UC
   u_uc: moduloUC
     port map (
-      rst, clk, barramento, RI_nrw, flagsNZ, s_barramentoDeControle -- n_sei e s_barramentoDeControle eu inventei, não achei a variávei certa pra essa saída
+      rst, clk, barramento, RI_nrw, flagsNZ, s_barramentoDeControle -- s_barramentoDeControle eu inventei, não achei a variávei certa pra essa saída
     );
 
   -- nbarrINC vai ser s_barramentoDeControle(0)
@@ -92,12 +98,6 @@ begin
   REM_nrw <= s_barramentoDeControle(8);
   RDM_nrw <= s_barramentoDeControle(9);
   RI_nrw <= s_barramentoDeControle(10);
-
-  -- modulo ULA
-  u_ula: moduloULA
-    port map (
-      rst, clk, AC_nrw, ula_op, MEM_nrw, flagsNZ, barramento
-    );
 
   -- modulo PC
   u_pc: moduloPC

@@ -78,7 +78,7 @@ architecture docontrolstuff of moduloUC is
     );
   end component;
 
-  component ADD is
+  component ADDD is
     port (
       c : in  std_logic_vector(2 downto 0);
       s : out std_logic_vector(10 downto 0)
@@ -164,6 +164,9 @@ begin
   -- registrador RI
   u_regRI: reg8bits port map (barramento, clk, '1', rst, RI_nrw, s_ri2dec);
 
+  -- contador
+  u_contador: contador port map (clk, rst, '1', s_ciclo);
+
   -- decodificador 8 para 11
   s_dec2uc <= "10000000000" when s_ri2dec = "00000000" else -- NOP
               "01000000000" when s_ri2dec = "00010000" else -- STA
@@ -177,13 +180,11 @@ begin
               "00000000010" when s_ri2dec = "10100000" else -- JZ
               "00000000001" when s_ri2dec = "11110000"; -- HLT
 
-  -- contador
-  u_contador: contador port map (clk, rst, '1', s_ciclo);
-
   -- Unidade de Controle
   -- vou usar como componente
-  s_bctrl <= sLDA when s_dec2uc = "00100000000" else
+  s_bctrl <= sNOP when s_dec2uc = "10000000000" else
              sSTA when s_dec2uc = "01000000000" else
+             sLDA when s_dec2uc = "00100000000" else
              sADD when s_dec2uc = "00010000000" else
              sOR  when s_dec2uc = "00001000000" else
              sAND when s_dec2uc = "00000100000" else
@@ -193,8 +194,8 @@ begin
              sJZ  when s_dec2uc = "00000000010" else
              sHLT when s_dec2uc = "00000000001";
 
-  in_jn <= flags_nz(1); 
-  in_jz <= flags_nz(0); 
+  in_jn <= flags_nz(1);
+  in_jz <= flags_nz(0);
 
   -- componente LDA
   u_LDA: LDA port map (s_ciclo, sLDA);
@@ -203,7 +204,7 @@ begin
   -- componente NOP
   u_NOP: NOP port map (s_ciclo, sNOP);
   -- componente ADD
-  u_ADD: ADD port map (s_ciclo, sADD);
+  u_ADD: ADDD port map (s_ciclo, sADD);
   -- componente ORR
   u_OR: ORR port map (s_ciclo, sOR);
   -- componente ANDD
@@ -218,6 +219,33 @@ begin
   u_JZ: JZ port map (s_ciclo, in_jz, sJZ);
   -- componente HLT
   u_HLT: HLT port map (s_ciclo, sHLT);
+
+  bctrl <= s_bctrl;
+
+  -- PARA DEBUGGING:
+  instrucaoAtiva <= "NOP" when s_ri2dec = "00000000" else -- NOP
+                    "STA" when s_ri2dec = "00010000" else -- STA
+                    "LDA" when s_ri2dec = "00100000" else -- LDA
+                    "ADD" when s_ri2dec = "00110000" else -- ADD
+                    "ORR" when s_ri2dec = "01000000" else -- OR
+                    "AND" when s_ri2dec = "01010000" else -- AND
+                    "NOT" when s_ri2dec = "01100000" else -- NOT
+                    "JMP" when s_ri2dec = "10000000" else -- JMP
+                    "JMP" when s_ri2dec = "10010000" else -- JN
+                    "JMP" when s_ri2dec = "10100000" else -- JZ
+                    "HLT" when s_ri2dec = "11110000" else -- HLT
+                    "ERR";
+
+  operacaoULA <= "001" when s_bctrl = sADD else
+                 "101" when s_bctrl = sOR else
+                 "011" when s_bctrl = sAND else
+                 "100" when s_bctrl = sNOT else
+                 "000" when s_bctrl = sLDA else
+                 "ERR";
+
+  FLAGS <= "JN" when in_jn = '1' else
+           "JZ" when in_jz = '1' else
+           "NA";
 
 end architecture;
 

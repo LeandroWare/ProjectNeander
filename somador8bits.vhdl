@@ -23,7 +23,7 @@ architecture comportamento of somador8bits is
     );
   end component;
 
-  signal carry : std_logic_vector(6 downto 0);
+  signal carry : std_logic_vector(7 downto 0);
 
 begin
   u_somador0: somador1bit port map (a(0), b(0), cin, carry(0), s(0));

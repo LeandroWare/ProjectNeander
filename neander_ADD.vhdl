@@ -3,14 +3,14 @@ library IEEE;
 
   -- ABAIXO COLOCAR EM OUYRO ARQUIVO (ADD.VHDL) TODO
 
-entity ADD is
+entity ADDD is
   port (
     c : in  std_logic_vector(2 downto 0);
     s : out std_logic_vector(10 downto 0)
   );
 end entity;
 
-architecture ADD of ADD is
+architecture ADDD of ADDD is
 begin
   s(0)          <= '1';                                                     -- barrINC
   s(1)          <= '0' when c = "101" else '1';                             -- barrPC

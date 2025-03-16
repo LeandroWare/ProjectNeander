@@ -34,7 +34,7 @@ end component;
 begin
     u_controle : controle port map(sq, sj, sk);
 
-    u_ffjk0 : ffjk port map(sj(0), sk(0), clock, reset, pr, sq(0), snq(0));
+    u_ffjk0 : ffjk port map(sj(0), sk(0), clock, pr, reset, sq(0), snq(0));
     u_ffjk1 : ffjk port map(sj(1), sk(1), clock, pr, reset, sq(1), snq(1));
     u_ffjk2 : ffjk port map(sj(2), sk(2), clock, pr, reset, sq(2), snq(2));
 

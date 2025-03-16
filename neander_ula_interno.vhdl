@@ -23,7 +23,7 @@ architecture domathstuff of moduloULAinterno is
     );
   end component;
 
-  signal sand, sor, snot, slda, ss : std_logic_vector(7 downto 0);
+  signal sand, sor, snot, slda, ss : std_logic_vector(7 downto 0) := (others => 'Z');
   signal sadd, saddc               : std_logic_vector(7 downto 0);
   signal s_overflow                : std_logic;
 
@@ -62,8 +62,7 @@ begin
         sadd when ula_op = "001" else
         sor  when ula_op = "101" else
         sand when ula_op = "011" else
-        snot when ula_op = "100" else
-          (others => 'Z');
+        snot when ula_op = "100";
 
   -- FLAGS
   -- FLAG N
@@ -72,4 +71,6 @@ begin
   -- FLAG Z
   flags_nz(0) <= '1' when ss = "00000000";
   -- alternativa se der errado -> not(ss(7) or ss(6) or ss(5) or ss(4) or ss(3) or ss(2) or ss(1) or ss(0));
+
+  s <= ss;
 end architecture;
