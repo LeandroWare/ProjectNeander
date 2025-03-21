@@ -69,7 +69,7 @@ begin
   flags_nz(1) <= ss(7);
 
   -- FLAG Z
-  flags_nz(0) <= '1' when ss = "00000000";
+  flags_nz(0) <= not(ss(7) or ss(6) or ss(5) or ss(4) or ss(3) or ss(2) or ss(1) or ss(0));
   -- alternativa se der errado -> not(ss(7) or ss(6) or ss(5) or ss(4) or ss(3) or ss(2) or ss(1) or ss(0));
 
   s <= ss;
